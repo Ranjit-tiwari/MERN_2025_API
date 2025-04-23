@@ -48,3 +48,21 @@ export const getMyProfile = (req, res) => {
         user: req.user
     })
 }
+
+// getUserById
+export const getUserById = async (req, res) => {
+    
+        const id = req.params.id;
+        const user = await User.findById(id);
+    
+        if (!user) return res.status(404).json({
+            success: false,
+            message: 'Invalid  Id'
+        })
+    
+        res.json({
+            success: true,
+            message: "This is single user",
+            user
+        })
+}
