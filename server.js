@@ -41,7 +41,7 @@ app.use('/api/blogs', blogRouter);
 
 // MVC MODEL VIEWS CONTROLLER
 
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is Running on ${process.env.PORT}`);

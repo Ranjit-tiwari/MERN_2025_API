@@ -6,6 +6,14 @@ import { userLogin } from './user.js';
 export const createBlog = async (req, res) => {
 
     const { title, description, imgUrl } = req.body;
+
+    if (!req.user) {
+        return res.status(401).json({
+            success: false,
+            message: "Unauthorized: User not authenticated"
+        });
+    }
+
     await Blog.create({
         title,
         description,
@@ -18,9 +26,19 @@ export const createBlog = async (req, res) => {
     })
 }
 
+
+
+
+
 // myblogs
 
 export const myBlog = async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({
+            success: false,
+            message: "Unauthorized: User not authenticated"
+        });
+    }
     const userid = req.user._id;
     const blogs = await Blog.find({ user: userid })
 
@@ -46,10 +64,10 @@ export const updateBlog = async (req, res) => {
     blog.title = title;
     blog.description = description;
     blog.imgUrl = imgUrl;
-    blog.save();
-    res.status(201).json({
+    await blog.save();
+    res.status(200).json({
         success: true,
-        message: "updating blog",
+        message: "Blog updated successfully",
         blog
     })
 }
@@ -63,7 +81,7 @@ export const deleteBlog = async (req, res) => {
         success: false,
         message: 'Invalid blog Id'
     })
-    await Blog.deleteOne();
+    await Blog.deleteOne({_id:id});
     res.json({
         success: true,
         message: "blog deleted"
@@ -75,13 +93,13 @@ export const getAllBlogs = async (req, res) => {
 
     const blogs = await Blog.find();
 
-    if (!blogs) return res.status(404).json({
+    if (!blogs || blogs.length === 0    ) return res.status(404).json({
         success: false,
         message: 'There is no Blogs'
     })
 
 
-    res.json({
+    res.status(200).json({
         success: true,
         message: "All Blogs",
         blogs
@@ -99,9 +117,9 @@ export const getBlogById = async (req, res) => {
         message: 'Invalid blog Id'
     })
 
-    res.json({
+    res.status(200).json({
         success: true,
-        message: "your blog",
+        message: "Blog fetched successfully",
         blog
     })
 }

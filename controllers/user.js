@@ -2,11 +2,13 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from '../Models/users.js';
 import { generateCookie } from '../utils/feature.js';
+
 // Register
+
 export const userRegister = async (req, res) => {
     const { name, email, password } = req.body;
     let user = await User.findOne({ email });
-    if (user) return res.status(404).json({
+    if (user) return res.status(400).json({
         success: false,
         message: "User already exists.."
     })
@@ -14,7 +16,7 @@ export const userRegister = async (req, res) => {
     user = await User.create({
         name, email, password: hashedPassword
     });
-    generateCookie(user, res, 201, "User Register Successfully");
+    generateCookie(user, res, 201, `Welcome, ${user.name}! You have registered successfully.`);
 }
 
 //login
@@ -30,11 +32,14 @@ export const userLogin = async (req, res) => {
         success: false,
         message: "Invalid Crendentials !"
     })
-    generateCookie(user, res, 201, `Welcome ${user.name}`);
+    generateCookie(user, res, 201, `Welcome Back, ${user.name}`);
 }
+
+
 export const logout = (req, res) => {
     res.status(200).cookie("token", "", {
-        expires: new Date(Date.now())
+        expires: new Date(Date.now()),
+        httpOnly:true
     }).json({
         success: true,
         message:
@@ -57,12 +62,12 @@ export const getUserById = async (req, res) => {
     
         if (!user) return res.status(404).json({
             success: false,
-            message: 'Invalid  Id'
+            message: 'Invalid  user Id'
         })
     
-        res.json({
+        res.status(200).json({
             success: true,
-            message: "This is single user",
+            message: "User details",
             user
         })
 }
