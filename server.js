@@ -3,8 +3,8 @@ import { type } from 'os';
 import express from 'express'
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
+import blogRouter from './routes/blog.js'
 import userRouter from './routes/user.js';
-import bolgRouter from './routes/blog.js'
 import { config } from 'dotenv';
 import cors from 'cors'
 import { get } from 'http';
@@ -15,9 +15,9 @@ app.use(express.json());
 
 app.use(cookieParser());
 app.use(cors({
-    origin:[process.env.FRONTEND_URI],
-    methods:["GET","POST","PUT","DELETE"],
-    credentials:true
+    origin: [process.env.FRONTEND_URI],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
 }))
 
 config(
@@ -37,7 +37,7 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use('/api/users', userRouter);
 
 // Blog router
-app.use('/api/blogs', bolgRouter);
+app.use('/api/blogs', blogRouter);
 
 // MVC MODEL VIEWS CONTROLLER
 

@@ -15,7 +15,7 @@ router.post('/login', userLogin)
 router.get('/logout', logout)
 
 // MyProfile
-router.get('/myprofile', isAuthenticated,getMyProfile)
+router.get('/myprofile', isAuthenticated , getMyProfile)
 
 // getUserbyid
 router.get('/:id',getUserById);

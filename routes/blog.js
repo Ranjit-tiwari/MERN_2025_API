@@ -1,6 +1,6 @@
 import express from 'express';
-import { isAuthenticated } from '../middlewares/auth.js';
 import { createBlog, myBlog, updateBlog, deleteBlog, getAllBlogs, getBlogById } from '../controllers/blog.js'
+import { isAuthenticated } from '../middlewares/auth.js';
 
 
 const router = express.Router();
@@ -17,12 +17,6 @@ router.delete('/:id', isAuthenticated, deleteBlog);
 router.get('/allblogs', getAllBlogs);
 
 router.get('/blog/:id', isAuthenticated, getBlogById);
-
-
-
-
-
-
 
 
 
